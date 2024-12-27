@@ -20,12 +20,14 @@ class WithContextActivity : ComponentActivity() {
     setContentView(R.layout.layout_1)
     infoTextView = findViewById(R.id.infoTextView)
 
-
     CoroutineScope(Dispatchers.Main).launch {
+      // 并行的切线程，使用launch
+      // 串行的切线程，使用挂起函数withContext，sleep比delay更准确
       val data = withContext(Dispatchers.IO) {
         // 网络代码
         "data"
       }
+      // 实际项目中一般不会直接这样写，而是使用自定义挂起函数
       val processedData = withContext(Dispatchers.Default) {
         // 处理数据
         "processed $data"

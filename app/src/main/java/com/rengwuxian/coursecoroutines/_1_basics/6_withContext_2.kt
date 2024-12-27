@@ -27,11 +27,14 @@ class WithContext2Activity : ComponentActivity() {
     }
   }
 
+  // 抽取函数的时候应该把业务代码和withContext一起抽取出来
+  // 挂起函数在语法层面的语法优势:业务代码和所在线程绑定，确保在正确线程里面执行业务代码
   private suspend fun getData() = withContext(Dispatchers.IO) {
     // 网络代码
     "data"
   }
 
+  // 协程优化，launch(Dispatchers.Default){ withContext(Dispatchers.Default){} }，相同ContinuationInterceptor的情况下并不会发生线程，而是在原来的线程继续处理，因此无性能损耗
   private suspend fun processData(data: String) = withContext(Dispatchers.Default) {
     // 处理数据
     "processed $data"

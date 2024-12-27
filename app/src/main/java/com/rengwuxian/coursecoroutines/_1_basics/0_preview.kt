@@ -32,15 +32,18 @@ class PreviewActivity : ComponentActivity() {
       CourseCoroutinesTheme {}
     }
 
+    // 启动线程
     thread {
 
     }
 
+    // 启动协程
     GlobalScope.launch {
 
     }
   }
 
+  // 线程切换的先后串行任务-传统写法
   private fun callbackStyle() {
     gitHub.contributorsCall("square", "retrofit").enqueue(object : Callback<List<Contributor>> {
       override fun onResponse(
@@ -55,12 +58,18 @@ class PreviewActivity : ComponentActivity() {
     })
   }
 
+  // 线程切换的先后串行任务-协程写法
   private fun coroutinesStyle() = lifecycleScope.launch {
+    // 后台线程
     val contributors = gitHub.contributors("square", "retrofit")
+    // 主线程
     showContributors(contributors)
   }
 
+  // 并行任务-传统写法，多层嵌套
   private fun completableFutureStyleMerge() {
+    // Future
+    // CountDownLatch
     val future1 = gitHub.contributorsFuture("square", "retrofit")
     val future2 = gitHub.contributorsFuture("square", "okhttp")
     future1.thenCombine(future2) { contributors1, contributors2 ->
@@ -72,6 +81,7 @@ class PreviewActivity : ComponentActivity() {
     }
   }
 
+  // 并行任务-传统写法-RxJava，链式写法
   private fun rxStyleMerge(): Disposable {
     val single1 = gitHub.contributorsRx("square", "retrofit")
     val single2 = gitHub.contributorsRx("square", "okhttp")
@@ -81,6 +91,7 @@ class PreviewActivity : ComponentActivity() {
       .subscribe(::showContributors)
   }
 
+  // 并行任务-协程写法
   private fun coroutinesStyleMerge() = lifecycleScope.launch {
     val contributors1 = async { gitHub.contributors("square", "retrofit") }
     val contributors2 = async { gitHub.contributors("square", "okhttp") }

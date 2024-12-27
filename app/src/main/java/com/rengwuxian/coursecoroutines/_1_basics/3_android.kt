@@ -22,16 +22,22 @@ class AndroidActivity : ComponentActivity() {
     infoTextView = findViewById(R.id.infoTextView)
 
     // KTX
+    // 协程启动在主线程
+    // 1. 绑定所在组件的生命周期，当组件生命周期结束时，协程也会被取消
+    // 2. 有内置的ContinuationInterceptor，直接Launch就是主线程，内部是Dispatchers.Main.immediate
+    // Dispatchers.Main和Dispatchers.Main.immediate的区别：
+    // 1. Dispatchers.Main会使用handler.post
+    // 2. Dispatchers.Main.immediate经过性能优化，会先判断是否为主线程，不是才会使用handler.post
     lifecycleScope.launch {
 
     }
-    // ContinuationInterceptor
     Dispatchers.Default
     // Handler.post()
   }
 
   class MyViewModel : ViewModel() {
     fun someFun() {
+      // 同lifecycleScope类似，有内置的ContinuationInterceptor，直接Launch就是主线程，内部是Dispatchers.Main.immediate
       viewModelScope.launch {
 
       }

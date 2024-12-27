@@ -29,6 +29,7 @@ class SuspendActivity : ComponentActivity() {
     coroutinesStyle()
   }
 
+  // 回调形式的切线程
   private fun callbackStyle() {
     gitHub.contributorsCall("square", "retrofit")
       .enqueue(object : Callback<List<Contributor>> {
@@ -56,6 +57,10 @@ class SuspendActivity : ComponentActivity() {
       })
   }
 
+  // 协程形式的切线程
+  // 协程被挂起suspend：挂起函数把协程暂停了，协程和线程分离，不再占用协程所在的线程，线程被让出了，而是切到挂起函数指定的线程
+  // 协程恢复resume：回到协程自己线程继续执行
+  // 挂起函数需要在协程作用域中调用才有意义
   private fun coroutinesStyle() = CoroutineScope(Dispatchers.Main).launch {
     val contributors = gitHub.contributors("square", "retrofit")
     showContributors(contributors)
