@@ -26,28 +26,29 @@ class CallbackToSuspendActivity : ComponentActivity() {
     infoTextView = findViewById(R.id.infoTextView)
 
     val job = lifecycleScope.launch {
+      // 嵌套的协程异常无法通过try捕获
       try {
-        // 无法捕获launch{}的异常
         launch {  }
-        val contributors = callbackToCancellableSuspend()
-        showContributors(contributors)
+
+        // 可以直接捕获挂起函数的异常
+        try {
+          val contributors = callbackToCancellableSuspend()
+          showContributors(contributors)
+        } catch (e: Exception) {
+
+        }
+
       } catch (e: Exception) {
         infoTextView.text = e.message
       }
     }
-//
-//    lifecycleScope.launch {
-//      suspendCancellableCoroutine {
-//
-//      }
-//    }
 
-      // 取消需要挂起函数的配合
-//    val job = lifecycleScope.launch {
-//      println("Coroutine cancel: 1")
-//      Thread.sleep(500)
-//      println("Coroutine cancel: 2")
-//    }
+    // 取消需要挂起函数的配合，例如sleep是不会配合取消的
+    // val job = lifecycleScope.launch {
+    //   println("Coroutine cancel: 1")
+    //   Thread.sleep(500)
+    //   println("Coroutine cancel: 2")
+    // }
 
     lifecycleScope.launch {
       delay(200)
@@ -55,7 +56,7 @@ class CallbackToSuspendActivity : ComponentActivity() {
     }
   }
 
-  // 回调函数转换为挂起函数，不支持取消
+  // 回调函数转换为挂起函数，不支持取消，调用后就算协程取消了也会继续执行完成
   private suspend fun callbackToSuspend() = suspendCoroutine {
     gitHub.contributorsCall("square", "retrofit")
       .enqueue(object : Callback<List<Contributor>> {
@@ -77,7 +78,6 @@ class CallbackToSuspendActivity : ComponentActivity() {
   private suspend fun callbackToCancellableSuspend() = suspendCancellableCoroutine {
     // 可以注册一个取消的回调，进行收尾工作
     it.invokeOnCancellation {
-
     }
     gitHub.contributorsCall("square", "retrofit")
       .enqueue(object : Callback<List<Contributor>> {

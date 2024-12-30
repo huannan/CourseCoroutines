@@ -80,7 +80,7 @@ class StructuredConcurrencyActivity : ComponentActivity() {
 
     private fun coroutinesStyle() = lifecycleScope.launch {
         // 通过隐式Receiver this在协程内部再去启动新的协程
-        // 内部的CoroutineScope收到外部的CoroutineScope管理
+        // 内部的CoroutineScope受到外部的CoroutineScope管理
         launch {
 
         }

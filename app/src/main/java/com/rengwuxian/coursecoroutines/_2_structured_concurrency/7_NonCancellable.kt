@@ -13,6 +13,11 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+// NonCancellable本质上是一个单例Job，切断了父子协程的关系，一般配合withContext使用
+// 使用场景：
+// 1. 取消前的收尾清理工作：协程被调用 cancel() 后真正退出执行之前的工作，在处理清理工作时不希望其他挂起函数中断收尾清理工作
+// 2. 不好收尾的业务工作：比如写文件、数据库等不想被中途停止，写入的东西还要撤销就是很麻烦的事情
+// 3. 跟当前业务无关的其他工作：比如写日志，协程的任务被取消了，日志还是会需要记录的，这种场景就是用 launch(NonCancellable) 来处理
 fun main() = runBlocking<Unit> {
   val scope = CoroutineScope(EmptyCoroutineContext)
   var childJob: Job? = null
@@ -27,11 +32,14 @@ fun main() = runBlocking<Unit> {
     println("childJob parent: ${childJob?.parent}")
     childJob2 = launch(newParent) {
       println("Child started")
+      // 不好收尾的业务工作
       writeInfo()
+      // 跟当前业务无关的其他工作
       launch(NonCancellable) {
         // Log
       }
       if (!isActive) {
+        // 取消前的收尾清理工作
         withContext(NonCancellable) {
           // Write to database (Room)
           delay(1000)
