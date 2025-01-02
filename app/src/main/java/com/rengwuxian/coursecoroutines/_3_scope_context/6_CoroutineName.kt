@@ -22,3 +22,9 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+CoroutineName与Thread.name类似，主要用于测试和调试时更方便的查看代码运行是否符合在我们设计的工作流程上正确执行。
+
+ */

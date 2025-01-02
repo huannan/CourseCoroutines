@@ -25,3 +25,9 @@ class Logger : AbstractCoroutineContextElement(Logger) {
     println("Current coroutine: $coroutineContext")
   }
 }
+
+/*
+
+自定义CoroutineContext，给协程增加自定义属性，继承AbstractCoroutineContextElement，实现companion object Key即可。
+
+ */
