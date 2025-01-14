@@ -26,3 +26,13 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+把 SendChannel 暴露出来
+前面提到把 Channel 的创建及数据发送和协程放在一起可以使用 produce() 简化代码，实际上还提供了 把 Channel 的创建及数据接收和协程放在一起的函数：actor()。
+* produce() 是提供一个协程，然后在内部创建一个 Channel 对象出来，并把 ReceiveChannel 用返回值的形式暴露出来，然后在内部提供 SendChannel。
+* actor() 是提供一个协程，然后在内部创建一个 Channel 对象出来，并把 SendChannel 用返回值的形式暴露出来，然后在内部提供 ReceiveChannel。
+
+
+ */

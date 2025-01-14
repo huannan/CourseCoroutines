@@ -23,3 +23,10 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+withIndex() 会给每个 Flow 发送的元素加上一个序号，序号从0开始。
+collectIndexed() 也是给元素加上编号，只不过它是在收集的时候加编号，withIndex() 可以在中间流程加编号。
+
+ */

@@ -39,3 +39,17 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+retry()、retryWhen() 和 catch() 操作符一样也是针对上游异常时会触发的操作符，但和 catch() 不同的是，当上游 Flow 异常时 retry()、retryWhen() 可以根据需要选择重启或不重启 Flow。
+重启的是整个上游 Flow（包括 retry()、retryWhen() 之前的操作符）的流程，对下游是无感知的；不选择重启则会将异常继续往下抛到下游。
+
+retry()
+指定重启次数，超过就将异常往下抛
+指定是否重启的条件，条件返回 true 会重启，返回 false 会直接将异常往下抛
+
+retryWhen { cause, attempt ->  }
+cause：异常的原因
+attempt：已经重试的次数
+ */

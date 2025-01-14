@@ -38,3 +38,17 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+launchIn链式写法，相当于collect{}
+flow.onEach {
+    println("flow: $it")
+  }.launchIn(scope)
+
+添加编号
+collectIndexed
+
+collectLatest：内部是mapLatest(action).buffer(0).collect()
+
+ */

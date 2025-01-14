@@ -51,3 +51,11 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+transform() 就是更加底层的 map()，同样也是转换后将数据往下游发送，但需要自己手动调用 emit() 发送数据，可以任意定制发送逻辑，甚至是不发送。
+transformWhile() 相当于 transform() 和 takeWhile() 的结合。
+transformLatest() 就是 mapLatest() 的底层版本。
+
+ */

@@ -102,3 +102,15 @@ class PreviewActivity : ComponentActivity() {
     println("${it.login} has made ${it.contributions} contributions")
   }
 }
+
+/*
+
+协程定位：底层通过线程实现的并发管理工具
+优势：线性结构写并发代码，保持清晰轻量，比线程写起来简单好维护
+
+并发总结：
+1. 切线程
+2. 线程之间的配合，比如等待
+3. 互斥锁，线程安全
+
+ */

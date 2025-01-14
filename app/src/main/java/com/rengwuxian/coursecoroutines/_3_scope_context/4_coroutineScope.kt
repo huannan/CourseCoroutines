@@ -82,9 +82,9 @@ coroutineScope() 也是会创建一个子协程，和用 launch 创建子协程�
 coroutineScope()函数的常用场景是：
 1. 当我们想在挂起函数里启动协程但又没有启动协程的环境时，就用 coroutineScope() 提供 CoroutineScope 的环境
     private suspend fun someFun() = coroutineScope {
-    launch {
+        launch {
 
-    }
+        }
 }
 2. coroutineScope() 可以用来封装完整的功能逻辑，尤其是针对协程的结构化异常管理，在抛出异常时正确捕获try-catch异常能让整个外部协程继续正常工作而不会导致整个协程树崩溃
     val name = try {
