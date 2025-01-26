@@ -23,13 +23,17 @@ fun main() = runBlocking<Unit> {
   val flow1 = flowOf(1, 2, 3, 4, 5)
   val channel = flow1.produceIn(scope) // Channel produce()
   scope.launch {
+    // 获取第一条元素
     println("First: ${flow1.first()}")
+    // 加上符合条件
     println("First with condition: ${flow1.first { it > 2 }}")
+    // 找不到的符合条件的元素的时候会抛异常
     try {
       flowOf<Int>().first()
     } catch (e: NoSuchElementException) {
       println("No element")
     }
+    // 找不到元素的时候返回null作为结果
     println("firstOrNull(): ${flow1.firstOrNull { it > 5 }}")
     // terminal operator
     flow1.last()
@@ -48,3 +52,9 @@ fun main() = runBlocking<Unit> {
   }
   delay(10000)
 }
+
+/*
+
+把Flow转换成其它类型：收集Flow并且在手机过程中做各种整理计算，把整理好的结果归结成返回值来输出
+
+ */
